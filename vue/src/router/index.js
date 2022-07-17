@@ -20,7 +20,7 @@ const routes = [
         children: [
             {path: '/dashboard', name: 'Dashboard', component: Dashboard},
             {path: '/myforum', name: 'Myforum', component: Myforum},
-            {path: '/posts/create', name: 'PostCreate', component: PostView},
+            {path: '/posts/create/:create', name: 'PostCreate', component: PostView},
             {path: '/posts/:id', name: 'PostView', component: PostView},
         ]
     },

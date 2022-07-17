@@ -34,6 +34,7 @@ class UpdatePostRequest extends FormRequest
             'num' =>'nullable|int',
             'status' => 'required|boolean',
             'content' => 'nullable|string',
+            'floors' => 'array'
         ];
     }
 }

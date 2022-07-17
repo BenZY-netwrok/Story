@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function() {
     
 });
 
-
+Route::post('/post/{post}/reply', [\App\Http\Controllers\PostController::class, 'storeReply']);
 
 Route::post('/register', [AuthController::class, 'register']);
 

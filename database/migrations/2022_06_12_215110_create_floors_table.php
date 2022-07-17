@@ -15,7 +15,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('floors', function (Blueprint $table) {
+        Schema::create('post_floors', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class, 'owner_user_id');
             $table->foreignIdFor(Post::class, 'post_id');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('floors');
+        Schema::dropIfExists('post_floors');
     }
 };

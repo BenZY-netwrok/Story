@@ -5,7 +5,7 @@
       <div class="flex justify-between items-center">
         <h1 class="text-3xl font-bold text-gray-900">My forum list</h1>
         <router-link
-          :to="{name: 'PostCreate'}"
+          :to="{name: 'PostCreate' ,params: {create: 'true'}}"
           class="py-2 px-3 text-white bg-emerald-500 rounded-md hover:bg-emerald-600"
         >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" >

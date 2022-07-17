@@ -2,7 +2,30 @@ import {createStore} from "vuex";
 import axiosClient from "../axios";
 import { AnnotationIcon, GlobeAltIcon, LightningBoltIcon, ScaleIcon } from '@heroicons/vue/outline'
 
+// const tmpPosts = [
+//     {
+//         id:1,
+//         title: 'The temp title',
+//         status: 'draft',
+//         content: 'This is a test for adding question to post',
+//         floors:[
+//             {
+//                 id: 1,
+//                 content: 'this is a good place',
+//                 user_name: 'Ben',
+//                 reply_user_id: '10'
+//             },
 
+//             {
+//                 id: 2,
+//                 content: "need to work on it and make it better",
+//                 user_name: 'Joe',
+//                 reply_user_id: '20'
+//             },
+//         ],
+
+//     },
+// ]
 
 const store = createStore({
     state: {
@@ -15,8 +38,10 @@ const store = createStore({
             },
             token: sessionStorage.getItem('TOKEN'),
         },
+        // flors: [...tmpPosts],
         currentPost: {
             loading: false,
+            replyAdd:false,
             data: {}
         },
         posts: {
@@ -32,6 +57,9 @@ const store = createStore({
     },
     getters: {},
     actions: {
+        getReplyAdd({commit}){
+            commit('setReplyAdd', true)
+        },
         getPost({commit}, id) {
             commit('setCurrentPostLoading', true);
             return axiosClient
@@ -49,7 +77,9 @@ const store = createStore({
         savePost({commit}, post) {
             delete post.image_url;
             let response;
+            
             if(post.id) {
+                console.log('post id exist');
                 response = axiosClient
                 .put(`/post/${post.id}`, post)
                 .then((res) => {
@@ -66,7 +96,9 @@ const store = createStore({
 
             return response;
         },
-
+        replyPost({commit}, {postId, replies}) {
+            return axiosClient.post(`/post/${postId}/reply`, {replies});
+        },
         deletePost({}, id) {
             return axiosClient.delete(`/post/${id}`);
         },
@@ -105,6 +137,9 @@ const store = createStore({
         }
     },
     mutations: {
+        setReplyAdd: (state, replyAdd) => {
+            state.currentPost.replyAdd = replyAdd;
+        },
         setCurrentPostLoading: (state, loading) => {
             state.currentPost.loading = loading;
           },

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Support\Facades\URL;
+
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource
@@ -26,8 +27,9 @@ class PostResource extends JsonResource
             'num' => $this->num,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'floors' => [],
-            'current_user_id' => $request->user()->id
+            // 'floors' => [],
+            'current_user_id' => $request->user()->id,
+            'floors' => PostFloorResource::collection($this->floors),
         ];
     }
 }

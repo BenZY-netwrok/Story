@@ -18,4 +18,8 @@ class Post extends Model
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
     }
+
+    public function floors() {
+        return $this->hasMany(PostFloor::class);
+    }
 }

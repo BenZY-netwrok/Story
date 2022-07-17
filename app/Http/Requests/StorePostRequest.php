@@ -39,6 +39,7 @@ class StorePostRequest extends FormRequest
             'num' =>'nullable|int',
             'last_user_id' => 'nullable',
             'status' => 'required|boolean',
+            'floors' => 'array'
         ];
     }
 }
