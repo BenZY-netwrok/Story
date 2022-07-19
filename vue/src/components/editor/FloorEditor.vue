@@ -43,6 +43,7 @@
         <input 
             type="text"
             :name="'floor_text_' + floor.content"
+            :disabled="floor.owner_user_id !== store.state.currentPost.data.current_user_id"
             v-model="floor.content"
             @change="dataChange"
             :id="'flloor_text_' + floor.content"

@@ -97,7 +97,7 @@ const store = createStore({
             return response;
         },
         replyPost({commit}, {postId, replies}) {
-            return axiosClient.post(`/post/${postId}/reply`, {replies});
+            return axiosClient.post(`/reply/${postId}/reply`, replies);
         },
         deletePost({}, id) {
             return axiosClient.delete(`/post/${id}`);

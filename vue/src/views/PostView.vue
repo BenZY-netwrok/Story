@@ -251,13 +251,13 @@ function onImageChoose (ev) {
 
 //create or update post
 function savePost(model_owner_id) {
-    if(store.state.currentPost.data.current_user_id === model_owner_id){
+    if(store.state.currentPost.data.current_user_id === model_owner_id || route.params.create){
         store.dispatch("savePost", model.value).then(({ data }) => {
             store.commit('notify', {
                 type: 'success',
                 message: 'Post was successfully updated'
             });
-            
+            console.log(data);
             router.push({
                 name: "PostView",
                 params: {id: data.data.id},
@@ -268,15 +268,21 @@ function savePost(model_owner_id) {
             store.dispatch("replyPost", {
                 postId: model.value.id,
                 replies:model.value
-            });
-            
-        router.push({
-                name: "PostView",
-                params: {},
-                // params: {id: data.data.id},
+            }).then(({ data }) => {
+                console.log(data);
+
+                store.commit('notify', {
+                    type: 'success',
+                    message: 'Post was successfully updated'
+                });
+
+                router.push({              
+                    name: "PostView",
+                    // params: {},
+                    params: {id: data.data.id},
+                });
             });
 
-  
     }
 
 }

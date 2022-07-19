@@ -24,12 +24,13 @@ Route::middleware('auth:sanctum')->group(function() {
     
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::resource('/allposts', AllpostController::class);
+    Route::post('/reply/{post}/reply', [\App\Http\Controllers\PostController::class, 'storeReply']);
     Route::resource('/post', PostController::class);
     
     
 });
 
-Route::post('/post/{post}/reply', [\App\Http\Controllers\PostController::class, 'storeReply']);
+
 
 Route::post('/register', [AuthController::class, 'register']);
 

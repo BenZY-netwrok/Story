@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdateFloorReplyRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Support\Facades\Validator;
 use App\Models\PostFloor;
@@ -76,10 +77,40 @@ class PostController extends Controller
 
     public function storeReply(UpdatePostRequest $request, Post $post)
     {
-        dd("storeReply");
+        $data = $request->validated();
+         // Update post in the database
+         $post->update($data);
+
+         // Get ids as plain array of existing replies
+             $existingIds = $post->floors()->pluck('id')->toArray();
+         // Get ids as plain array of new replies
+             $newIds = Arr::pluck($data['floors'], 'id');
+         // Delete replies
+             $toDelete = array_diff($existingIds, $newIds);
+         // Find replies to add
+             $toAdd = array_diff($newIds, $existingIds);
+ 
+         // Delete replies by $toDelete array
+             PostFloor::destroy($toDelete);
+ 
+         // Create new replies
+             foreach($data['floors'] as $floor) {
+                 if(in_array($floor['id'], $toAdd)) {
+                     $floor['post_id'] = $post->id;
+                     $this->createFloor($floor);
+                 }
+             }
+         
+         // Update existing replies
+             $replyMap = collect($data['floors'])->keyBy('id');
+             foreach($post->floors as $floor) {
+                 if(isset($replyMap[$floor->id])) {
+                     $this->updateFloor($floor, $replyMap[$floor->id]);
+                 }
+             }
+ 
+         return new PostResource($post);
     }
-
-
 
 
 
@@ -96,6 +127,7 @@ class PostController extends Controller
     {
         //
         $data = $request->validated();
+        
         // Check if image was given and save on local file system
         if (isset($data['image'])) {
             $relativePath = $this->saveImage($data['image']);
@@ -108,7 +140,7 @@ class PostController extends Controller
             }
         }
 
-        // Update survey in the database
+        // Update post in the database
         $post->update($data);
 
         // Get ids as plain array of existing replies
@@ -123,7 +155,7 @@ class PostController extends Controller
         // Delete replies by $toDelete array
             PostFloor::destroy($toDelete);
 
-        // Create new questions
+        // Create new replies
             foreach($data['floors'] as $floor) {
                 if(in_array($floor['id'], $toAdd)) {
                     $floor['post_id'] = $post->id;

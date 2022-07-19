@@ -13,6 +13,9 @@ class UpdatePostRequest extends FormRequest
      */
     public function authorize()
     {
+        if(preg_match('/^api\/reply\/\d+\/reply$/i', $this->path())) {
+            return true;
+        }
         $post = $this->route('post');
         if ($this->user()->id !== $post->owner_user_id) {
             return false;
@@ -27,14 +30,27 @@ class UpdatePostRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'title' => 'required|string|max:1000',
-            'image' => 'nullable|string',
-            'owner_user_id' => 'exists:users,id',
-            'num' =>'nullable|int',
-            'status' => 'required|boolean',
-            'content' => 'nullable|string',
-            'floors' => 'array'
-        ];
+        if(preg_match('/^api\/reply\/\d+\/reply$/i', $this->path())) {
+            return [
+                'title' => 'required|string|max:1000',
+                'image' => 'nullable|string',
+                'owner_user_id' => 'exists:users,id',
+                'num' =>'nullable|int',
+                'status' => 'required|boolean',
+                'content' => 'nullable|string',
+                'floors' => 'array'
+            ];
+        }else {
+            return [
+                'title' => 'required|string|max:1000',
+                'image' => 'nullable|string',
+                'owner_user_id' => 'exists:users,id',
+                'num' =>'nullable|int',
+                'status' => 'required|boolean',
+                'content' => 'nullable|string',
+                'floors' => 'array'
+            ];
+        }
+
     }
 }
